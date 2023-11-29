@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,8 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent implements OnInit {
   formLogin! : FormGroup;
   constructor(private fb : FormBuilder,
-              private authService : AuthService )
+              private authService : AuthService,
+              private router : Router )
                { }
 
 ngOnInit(): void {
@@ -25,7 +27,8 @@ handleLogin(){
   let password = this.formLogin.value.password;
  this.authService.login(username, password).subscribe({
   next : data => {
-    console.log(data)
+    this.authService.loadProfil(data);
+    this.router.navigateByUrl("/admin")
   },
   error : err => {
     console.log(err);
